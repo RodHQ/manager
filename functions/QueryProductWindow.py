@@ -28,13 +28,17 @@ class QueryProductWindow:
         self.search_entry.pack(side=tk.LEFT, padx=5)
         self.search_entry.bind('<KeyRelease>', self.filter_products)
 
-        self.tree = ttk.Treeview(self.root, columns=("name", "purchase_value", "date_added"), show='headings')
-        self.tree.heading("name", text="Nome do Produto")
-        self.tree.heading("purchase_value", text="Valor de Compra")
+        self.tree = ttk.Treeview(self.root, columns=("name", "genre", "year", "pixels", "date_added"), show='headings')
+        self.tree.heading("name", text="Nome do Filme")
+        self.tree.heading("genre", text="Gênero")
+        self.tree.heading("year", text="Ano de Criação")
+        self.tree.heading("pixels", text="Qualidade em Pixels")
         self.tree.heading("date_added", text="Data de Cadastro")
 
         self.tree.column("name", width=200, anchor=tk.CENTER)
-        self.tree.column("purchase_value", width=150, anchor=tk.CENTER)
+        self.tree.column("genre", width=150, anchor=tk.CENTER)
+        self.tree.column("year", width=100, anchor=tk.CENTER)
+        self.tree.column("pixels", width=150, anchor=tk.CENTER)
         self.tree.column("date_added", width=200, anchor=tk.CENTER)
 
         self.tree.pack(pady=5, fill=tk.BOTH, expand=True)
@@ -63,11 +67,14 @@ class QueryProductWindow:
     def display_products(self, products):
         self.clear_treeview()
         for product in products:
-            self.tree.insert("", tk.END, values=(product['name'], product['purchase_value'], product['date_added']))
+            self.tree.insert("", tk.END, values=(product['name'], product['genre'], product['year'], product['pixels'], product['date_added']))
 
     def filter_products(self, event):
         query = self.search_entry.get().lower()
-        filtered_products = [product for product in self.products if query in product['name'].lower()]
+        filtered_products = [
+            product for product in self.products
+            if query in product['name'].lower() or query in product['genre'].lower()
+        ]
         self.display_products(filtered_products)
 
     def delete_product(self):
@@ -82,14 +89,3 @@ class QueryProductWindow:
     def show_delete_product_window(self, product_name):
         delete_window = tk.Toplevel(self.root)
         DeleteProductWindow(delete_window, self.load_products, product_name)
-
-# Função de teste
-def test():
-    root = tk.Tk()
-    def go_back():
-        print("Voltar")
-    app = QueryProductWindow(root, go_back)
-    root.mainloop()
-
-# Descomente a linha abaixo para testar a interface
-# test()

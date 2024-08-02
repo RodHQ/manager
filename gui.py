@@ -21,10 +21,21 @@ class SalesApp:
         self.label = tk.Label(self.root, text="Selecione uma opção", font=("Helvetica", 16))
         self.label.pack(pady=20)
 
-        self.register_button = tk.Button(self.root, text="Cadastrar Produto", command=self.register_product)
+        self.filmes_button = tk.Button(self.root, text="Filmes", command=self.create_sub_menu)
+        self.filmes_button.pack(pady=10)
+
+    def create_sub_menu(self):
+        self.clear_window()
+
+        self.root.geometry("400x300")  # Definindo o tamanho da janela principal
+
+        self.label = tk.Label(self.root, text="Selecione uma opção", font=("Helvetica", 16))
+        self.label.pack(pady=20)
+
+        self.register_button = tk.Button(self.root, text="Cadastrar", command=self.register_product)
         self.register_button.pack(pady=10)
 
-        self.query_button = tk.Button(self.root, text="Consultar Produto", command=self.query_product)
+        self.query_button = tk.Button(self.root, text="Consultar", command=self.query_product)
         self.query_button.pack(pady=10)
 
     def clear_window(self):

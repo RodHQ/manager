@@ -4,12 +4,18 @@ class Database:
     def __init__(self):
         self.client = MongoClient("mongodb://root:example@localhost:27017/")
         self.db = self.client.sales_management
-        self.collection = self.db.products
+        self.collection = self.db.filmes
 
-    def add_product(self, name, purchase_value, date_added):
-        product = {"name": name, "purchase_value": purchase_value, "date_added": date_added}
+    def add_product(self, name, genre, year, pixels, date_added):
+        product = {
+            "name": name,
+            "genre": genre,
+            "year": year,
+            "pixels": pixels,
+            "date_added": date_added
+        }
         result = self.collection.insert_one(product)
-        print(f"Produto adicionado: {result.inserted_id}")  # Depuração: imprimir o ID do produto adicionado
+        print(f"Produto adicionado: {result.inserted_id}")
 
     def delete_product(self, name):
         result = self.collection.delete_one({"name": name})
@@ -17,8 +23,18 @@ class Database:
 
     def get_products(self):
         products = self.collection.find()
-        product_list = [{"name": product["name"], "purchase_value": product["purchase_value"], "date_added": product["date_added"]} for product in products]
-        print(product_list)  # Depuração: imprimir a lista de produtos
+        print(f"Teste: collection.find(): {products}")
+        product_list = [
+            {
+                "name": product["name"],
+                "genre": product["genre"],
+                "year": product["year"],
+                "pixels": product["pixels"],
+                "date_added": product["date_added"]
+            }
+            for product in products
+        ]
+        print(product_list)
         return product_list
 
     def __del__(self):

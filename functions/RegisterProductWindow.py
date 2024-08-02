@@ -14,18 +14,28 @@ class RegisterProductWindow:
     def create_widgets(self):
         self.clear_window()
 
-        self.label = tk.Label(self.root, text="Cadastrar Produto", font=("Helvetica", 16))
+        self.label = tk.Label(self.root, text="Cadastrar Filme", font=("Helvetica", 16))
         self.label.pack(pady=20)
 
-        self.product_name_label = tk.Label(self.root, text="Nome do Produto:")
-        self.product_name_label.pack(pady=5)
-        self.product_name_entry = tk.Entry(self.root)
-        self.product_name_entry.pack(pady=5)
+        self.nome_filme_label = tk.Label(self.root, text="Nome do Filme:")
+        self.nome_filme_label.pack(pady=5)
+        self.nome_filme_entry = tk.Entry(self.root)
+        self.nome_filme_entry.pack(pady=5)
 
-        self.purchase_value_label = tk.Label(self.root, text="Valor de Compra:")
-        self.purchase_value_label.pack(pady=5)
-        self.purchase_value_entry = tk.Entry(self.root)
-        self.purchase_value_entry.pack(pady=5)
+        self.genero_value_label = tk.Label(self.root, text="Gênero:")
+        self.genero_value_label.pack(pady=5)
+        self.genero_value_entry = tk.Entry(self.root)
+        self.genero_value_entry.pack(pady=5)
+
+        self.ano_value_label = tk.Label(self.root, text="Ano de criação:")
+        self.ano_value_label.pack(pady=5)
+        self.ano_value_entry = tk.Entry(self.root)
+        self.ano_value_entry.pack(pady=5)
+
+        self.pixels_value_label = tk.Label(self.root, text="Qualidade em pixels:")
+        self.pixels_value_label.pack(pady=5)
+        self.pixels_value_entry = tk.Entry(self.root)
+        self.pixels_value_entry.pack(pady=5)
 
         self.date_added_label = tk.Label(self.root, text="Data de Cadastro:")
         self.date_added_label.pack(pady=5)
@@ -43,16 +53,20 @@ class RegisterProductWindow:
             widget.destroy()
 
     def add_product(self):
-        product_name = self.product_name_entry.get()
-        purchase_value = self.purchase_value_entry.get()
-        date_added = datetime.now().strftime("%d/%m/%y %H:%M:%S")  # Obtendo a data e hora atual
+        nome_filme = self.nome_filme_entry.get()
+        genero = self.genero_value_entry.get()
+        ano = self.ano_value_entry.get()
+        pixels = self.pixels_value_entry.get()
+        date_added = datetime.now().strftime("%d/%m/%Y %H:%M:%S")  # Obtendo a data e hora atual
 
-        if product_name and purchase_value:
+        if nome_filme and genero and ano and pixels:
             db = Database()
-            print(f"Cadastrando produto: Nome={product_name}, Valor de Compra={purchase_value}, Data de Cadastro={date_added}")  # Depuração
-            db.add_product(product_name, purchase_value, date_added)
+            print(f"Cadastrando produto: Nome={nome_filme}, Gênero={genero}, Ano={ano}, Pixels={pixels}, Data de Cadastro={date_added}")  # Depuração
+            db.add_product(nome_filme, genero, ano, pixels, date_added)
             messagebox.showinfo("Sucesso", "Produto cadastrado com sucesso!")
-            self.product_name_entry.delete(0, tk.END)
-            self.purchase_value_entry.delete(0, tk.END)
+            self.nome_filme_entry.delete(0, tk.END)
+            self.genero_value_entry.delete(0, tk.END)
+            self.ano_value_entry.delete(0, tk.END)
+            self.pixels_value_entry.delete(0, tk.END)
         else:
             messagebox.showwarning("Erro", "Por favor, preencha todos os campos.")
