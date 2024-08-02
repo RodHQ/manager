@@ -89,3 +89,14 @@ class QueryProductWindow:
     def show_delete_product_window(self, product_name):
         delete_window = tk.Toplevel(self.root)
         DeleteProductWindow(delete_window, self.load_products, product_name)
+
+# Função de teste
+def test():
+    root = tk.Tk()
+    def go_back():
+        print("Voltar")
+    app = QueryProductWindow(root, go_back)
+    root.mainloop()
+
+# Descomente a linha abaixo para testar a interface
+# test()
