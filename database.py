@@ -17,9 +17,11 @@ class Database:
         result = self.collection.insert_one(product)
         print(f"Produto adicionado: {result.inserted_id}")  # Depuração: imprimir o ID do produto adicionado
 
+    def product_exists(self, name):
+        return self.collection.find_one({"name": name}) is not None
+
     def get_products(self):
         products = self.collection.find()
-        print(f"Teste: collection.find(): {products}")
         product_list = [
             {
                 "name": product.get("name", ""),
@@ -32,9 +34,6 @@ class Database:
         ]
         print(product_list)  # Depuração: imprimir a lista de produtos
         return product_list
-
-    def product_exists(self, name):
-        return self.collection.find_one({"name": name}) is not None
 
     def delete_product(self, name):
         result = self.collection.delete_one({"name": name})

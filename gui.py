@@ -1,8 +1,5 @@
 import tkinter as tk
-from database import Database
-from functions.QueryProductWindow import QueryProductWindow
-from functions.RegisterProductWindow import RegisterProductWindow
-
+from database import Database  # Certifique-se de que 'Database' está importando corretamente
 
 class SalesApp:
     def __init__(self, root):
@@ -21,8 +18,8 @@ class SalesApp:
         self.label = tk.Label(self.root, text="Selecione uma opção", font=("Helvetica", 16))
         self.label.pack(pady=20)
 
-        self.filmes_button = tk.Button(self.root, text="Filmes", command=self.create_sub_menu)
-        self.filmes_button.pack(pady=10)
+        self.register_button = tk.Button(self.root, text="Filmes", command=self.create_sub_menu)
+        self.register_button.pack(pady=10)
 
     def create_sub_menu(self):
         self.clear_window()
@@ -43,9 +40,9 @@ class SalesApp:
             widget.destroy()
 
     def register_product(self):
+        from functions.RegisterProductWindow import RegisterProductWindow
         RegisterProductWindow(self.root, self.create_main_menu)
 
     def query_product(self):
+        from functions.QueryProductWindow import QueryProductWindow
         QueryProductWindow(self.root, self.create_main_menu)
-
-
