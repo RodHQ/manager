@@ -67,7 +67,7 @@ class QueryProductWindow:
     def display_products(self, products):
         self.clear_treeview()
         for product in products:
-            self.tree.insert("", tk.END, values=(product['name'], product['genre'], product['year'], product['pixels'], product['date_added']))
+            self.tree.insert("", tk.END, values=(product['name'], product['genre'], product['year'], product['pixels']+"p", product['date_added']))
 
     def filter_products(self, event):
         query = self.search_entry.get().lower()

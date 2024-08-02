@@ -27,7 +27,7 @@ class RegisterProductWindow:
         self.genero_value_label.pack(pady=5)
         self.genero_value_combobox = ttk.Combobox(self.root,
                                                   values=["Ação", "Comédia", "Drama", "Fantasia", "Terror", "Romance",
-                                                          "Ficção", "Ficção Cientifica", "Guerra", "Desenho", "Disney"])
+                                                          "Ficção", "Ficção Cientifica", "Guerra", "Desenho", "Disney", "Heróis"])
         self.genero_value_combobox.pack(pady=5)
 
         self.ano_value_label = tk.Label(self.root, text="Ano de criação:")
