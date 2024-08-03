@@ -19,7 +19,7 @@ class RegisterProductWindow:
 
         self.nome_filme_label = tk.Label(self.root, text="Nome do Filme:")
         self.nome_filme_label.pack(pady=5)
-        self.nome_filme_entry = tk.Text(self.root, height=1, width=20)
+        self.nome_filme_entry = tk.Text(self.root, height=1, width=60)
         self.nome_filme_entry.pack(pady=5)
         self.nome_filme_entry.bind('<KeyRelease>', self.check_duplicate)
 
@@ -27,7 +27,7 @@ class RegisterProductWindow:
         self.genero_value_label.pack(pady=5)
         self.genero_value_combobox = ttk.Combobox(self.root,
                                                   values=["Ação", "Comédia", "Drama", "Fantasia", "Terror", "Romance",
-                                                          "Ficção", "Ficção Cientifica", "Guerra", "Desenho", "Disney", "Heróis"])
+                                                          "Ficção", "Ficção Cientifica", "Guerra", "Desenho", "Disney", "Heróis", "Suspense", "Aventura", "Comédia Romantica"])
         self.genero_value_combobox.pack(pady=5)
 
         self.ano_value_label = tk.Label(self.root, text="Ano de criação:")
@@ -37,7 +37,8 @@ class RegisterProductWindow:
 
         self.pixels_value_label = tk.Label(self.root, text="Qualidade em pixels:")
         self.pixels_value_label.pack(pady=5)
-        self.pixels_value_entry = tk.Entry(self.root)
+        self.pixels_value_entry = ttk.Combobox(self.root,
+                                                  values=["360", "720", "1080", "Cinema"])
         self.pixels_value_entry.pack(pady=5)
 
         self.date_added_label = tk.Label(self.root, text="Data de Cadastro:")
@@ -65,7 +66,7 @@ class RegisterProductWindow:
             self.nome_filme_entry.tag_remove("duplicate", "1.0", tk.END)
 
     def add_product(self):
-        nome_filme = self.nome_filme_entry.get("1.0", tk.END).strip()
+        nome_filme = self.nome_filme_entry.get("1.0", tk.END).strip().split('*', 1)[0].strip()
         genero = self.genero_value_combobox.get()
         ano = self.ano_value_entry.get()
         pixels = self.pixels_value_entry.get()
@@ -82,7 +83,7 @@ class RegisterProductWindow:
                 self.nome_filme_entry.delete("1.0", tk.END)
                 self.genero_value_combobox.set('')
                 self.ano_value_entry.delete(0, tk.END)
-                self.pixels_value_entry.delete(0, tk.END)
+                self.pixels_value_entry.set('')
                 self.nome_filme_entry.tag_remove("duplicate", "1.0", tk.END)  # Resetar a cor do texto
         else:
             messagebox.showwarning("Erro", "Por favor, preencha todos os campos.")
