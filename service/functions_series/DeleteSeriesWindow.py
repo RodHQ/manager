@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
-from database import Database
+from repository.seriesRepository import seriesRepository
 
-class DeleteProductWindow:
+class DeleteSeriesWindow:
     def __init__(self, root, callback, product_name):
         self.root = root
         self.callback = callback
@@ -28,22 +28,11 @@ class DeleteProductWindow:
             widget.destroy()
 
     def delete_product(self):
-        db = Database()
-        success = db.delete_product(self.product_name)
+        db = seriesRepository()
+        success = db.delete_serie(self.product_name)
         if success:
-            messagebox.showinfo("Sucesso", f"Produto '{self.product_name}' deletado com sucesso.")
+            messagebox.showinfo("Sucesso", f"Série '{self.product_name}' deletada com sucesso.")
         else:
             messagebox.showerror("Erro", f"Falha ao deletar o produto '{self.product_name}'.")
         self.root.destroy()
         self.callback()
-
-# Função de teste
-def test():
-    root = tk.Tk()
-    def refresh():
-        print("Atualizando lista de produtos...")
-    app = DeleteProductWindow(root, refresh, "Produto Teste")
-    root.mainloop()
-
-# Descomente a linha abaixo para testar a interface
-# test()

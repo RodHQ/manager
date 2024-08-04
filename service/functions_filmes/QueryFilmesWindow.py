@@ -1,23 +1,22 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from database import Database
-from functions.DeleteProductWindow import DeleteProductWindow
+from repository.filmesRepository import filmesRepository
+from service.functions_filmes.DeleteFilmesWindow import DeleteFilmesWindow
 
-class QueryProductWindow:
+class QueryFilmesWindow:
     def __init__(self, root, callback):
         self.root = root
         self.callback = callback
 
-        self.root.geometry("1000x500")  # Definindo o tamanho da janela de consulta
+        self.root.geometry("1000x500")
         self.create_widgets()
 
     def create_widgets(self):
         self.clear_window()
 
-        self.label = tk.Label(self.root, text="Consulta de Produtos", font=("Helvetica", 16))
+        self.label = tk.Label(self.root, text="Consulta de Filmes", font=("Helvetica", 16))
         self.label.pack(pady=20)
 
-        # Frame para a barra de pesquisa
         self.search_frame = tk.Frame(self.root)
         self.search_frame.pack(fill=tk.X, padx=20, pady=10, anchor='e')
 
@@ -60,14 +59,18 @@ class QueryProductWindow:
             self.tree.delete(item)
 
     def load_products(self):
-        db = Database()
-        self.products = db.get_products()
+        db = filmesRepository()
+        self.products = db.get_filme()
         self.display_products(self.products)
 
     def display_products(self, products):
         self.clear_treeview()
         for product in products:
-            self.tree.insert("", tk.END, values=(product['name'], product['genre'], product['year'], product['pixels']+"p", product['date_added']))
+            pixels = product['pixels']
+            if pixels.lower() != "cinema":
+                pixels += "p"
+            self.tree.insert("", tk.END,
+                             values=(product['name'], product['genre'], product['year'], pixels, product['date_added']))
 
     def filter_products(self, event):
         query = self.search_entry.get().lower()
@@ -84,19 +87,8 @@ class QueryProductWindow:
             product_name = item['values'][0]
             self.show_delete_product_window(product_name)
         else:
-            messagebox.showwarning("Aviso", "Selecione um produto para deletar.")
+            messagebox.showwarning("Aviso", "Selecione um filme para deletar.")
 
     def show_delete_product_window(self, product_name):
         delete_window = tk.Toplevel(self.root)
-        DeleteProductWindow(delete_window, self.load_products, product_name)
-
-# Função de teste
-def test():
-    root = tk.Tk()
-    def go_back():
-        print("Voltar")
-    app = QueryProductWindow(root, go_back)
-    root.mainloop()
-
-# Descomente a linha abaixo para testar a interface
-# test()
+        DeleteFilmesWindow(delete_window, self.load_products, product_name)

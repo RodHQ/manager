@@ -1,14 +1,14 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
 from datetime import datetime
-from database import Database
+from repository.filmesRepository import filmesRepository
 
-class RegisterProductWindow:
+class RegisterFilmesWindow:
     def __init__(self, root, callback):
         self.root = root
         self.callback = callback
 
-        self.root.geometry("500x600")  # Definindo o tamanho da janela de cadastro
+        self.root.geometry("800x600")
         self.create_widgets()
 
     def create_widgets(self):
@@ -57,9 +57,9 @@ class RegisterProductWindow:
             widget.destroy()
 
     def check_duplicate(self, event):
-        db = Database()
+        db = filmesRepository()
         nome_filme = self.nome_filme_entry.get("1.0", tk.END).strip()
-        if db.product_exists(nome_filme):
+        if db.filme_exists(nome_filme):
             self.nome_filme_entry.tag_add("duplicate", "1.0", tk.END)
             self.nome_filme_entry.tag_config("duplicate", foreground="red")
         else:
@@ -73,13 +73,13 @@ class RegisterProductWindow:
         date_added = datetime.now().strftime("%d/%m/%Y %H:%M:%S")  # Obtendo a data e hora atual
 
         if nome_filme and genero and ano and pixels:
-            db = Database()
-            if db.product_exists(nome_filme):
+            db = filmesRepository()
+            if db.filme_exists(nome_filme):
                 messagebox.showwarning("Erro", f"Produto com o nome '{nome_filme}' já existe.")
             else:
                 print(f"Cadastrando produto: Nome={nome_filme}, Gênero={genero}, Ano={ano}, Pixels={pixels}, Data de Cadastro={date_added}")  # Depuração
-                db.add_product(nome_filme, genero, ano, pixels, date_added)
-                messagebox.showinfo("Sucesso", "Produto cadastrado com sucesso!")
+                db.add_filme(nome_filme, genero, ano, pixels, date_added)
+                messagebox.showinfo("Sucesso", "Filme cadastrado com sucesso!")
                 self.nome_filme_entry.delete("1.0", tk.END)
                 self.genero_value_combobox.set('')
                 self.ano_value_entry.delete(0, tk.END)
@@ -91,5 +91,5 @@ class RegisterProductWindow:
 # Código de exemplo para iniciar a aplicação
 if __name__ == "__main__":
     root = tk.Tk()
-    app = RegisterProductWindow(root, callback=lambda: print("Voltar para o menu principal"))
+    app = RegisterFilmesWindow(root, callback=lambda: print("Voltar para o menu principal"))
     root.mainloop()
