@@ -14,7 +14,7 @@ class seriesRepository:
         }
         result = self.collection.insert_one(product)
 
-    def series_exists(self, name):
+    def serie_exists(self, name):
         return self.collection.find_one({"name": name}) is not None
 
     def get_series(self):

@@ -3,6 +3,7 @@ from tkinter import messagebox, ttk
 from datetime import datetime
 from repository.filmesRepository import filmesRepository
 
+
 class RegisterFilmesWindow:
     def __init__(self, root, callback):
         self.root = root
@@ -27,7 +28,8 @@ class RegisterFilmesWindow:
         self.genero_value_label.pack(pady=5)
         self.genero_value_combobox = ttk.Combobox(self.root,
                                                   values=["Ação", "Comédia", "Drama", "Fantasia", "Terror", "Romance",
-                                                          "Ficção", "Ficção Cientifica", "Guerra", "Desenho", "Disney", "Heróis", "Suspense", "Aventura", "Comédia Romantica"])
+                                                          "Ficção", "Ficção Cientifica", "Guerra", "Desenho", "Disney",
+                                                          "Heróis", "Suspense", "Aventura", "Comédia Romantica"])
         self.genero_value_combobox.pack(pady=5)
 
         self.ano_value_label = tk.Label(self.root, text="Ano de criação:")
@@ -38,7 +40,7 @@ class RegisterFilmesWindow:
         self.pixels_value_label = tk.Label(self.root, text="Qualidade em pixels:")
         self.pixels_value_label.pack(pady=5)
         self.pixels_value_entry = ttk.Combobox(self.root,
-                                                  values=["360", "720", "1080", "Cinema"])
+                                               values=["360", "720", "1080", "Cinema"])
         self.pixels_value_entry.pack(pady=5)
 
         self.date_added_label = tk.Label(self.root, text="Data de Cadastro:")
@@ -77,7 +79,8 @@ class RegisterFilmesWindow:
             if db.filme_exists(nome_filme):
                 messagebox.showwarning("Erro", f"Produto com o nome '{nome_filme}' já existe.")
             else:
-                print(f"Cadastrando produto: Nome={nome_filme}, Gênero={genero}, Ano={ano}, Pixels={pixels}, Data de Cadastro={date_added}")  # Depuração
+                print(
+                    f"Cadastrando produto: Nome={nome_filme}, Gênero={genero}, Ano={ano}, Pixels={pixels}, Data de Cadastro={date_added}")  # Depuração
                 db.add_filme(nome_filme, genero, ano, pixels, date_added)
                 messagebox.showinfo("Sucesso", "Filme cadastrado com sucesso!")
                 self.nome_filme_entry.delete("1.0", tk.END)
@@ -87,6 +90,7 @@ class RegisterFilmesWindow:
                 self.nome_filme_entry.tag_remove("duplicate", "1.0", tk.END)  # Resetar a cor do texto
         else:
             messagebox.showwarning("Erro", "Por favor, preencha todos os campos.")
+
 
 # Código de exemplo para iniciar a aplicação
 if __name__ == "__main__":

@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from repository.seriesRepository import seriesRepository
-from service.functions_series.DeleteSeriesWindow import DeleteSeriesWindow
+from repository.documentariosRepository import documentariosRepository
+from service.functions_documentarios.DeleteDocumentariosWindow import DeleteDocumentariosWindow
 
-class QuerySeriesWindow:
+class QueryDocumentariosWindow:
     def __init__(self, root, callback):
         self.root = root
         self.callback = callback
@@ -14,7 +14,7 @@ class QuerySeriesWindow:
     def create_widgets(self):
         self.clear_window()
 
-        self.label = tk.Label(self.root, text="Consulta de Series", font=("Helvetica", 16))
+        self.label = tk.Label(self.root, text="Consulta de Documentarios", font=("Helvetica", 16))
         self.label.pack(pady=20)
 
         self.search_frame = tk.Frame(self.root)
@@ -25,16 +25,18 @@ class QuerySeriesWindow:
 
         self.search_entry = tk.Entry(self.search_frame)
         self.search_entry.pack(side=tk.LEFT, padx=5)
-        self.search_entry.bind('<KeyRelease>', self.filter_serie)
+        self.search_entry.bind('<KeyRelease>', self.filter_documentarios)
 
         self.tree = ttk.Treeview(self.root, columns=("name", "genre", "year", "pixels", "date_added"), show='headings')
-        self.tree.heading("name", text="Nome da Série")
-        self.tree.heading("genre", text="")
-        self.tree.heading("year", text="")
+        self.tree.heading("name", text="Nome do Documentario")
+        self.tree.heading("genre", text="Gênero")
+        self.tree.heading("year", text="Ano de Criação")
         self.tree.heading("pixels", text="Qualidade em Pixels")
         self.tree.heading("date_added", text="Data de Cadastro")
 
         self.tree.column("name", width=200, anchor=tk.CENTER)
+        self.tree.column("genre", width=150, anchor=tk.CENTER)
+        self.tree.column("year", width=100, anchor=tk.CENTER)
         self.tree.column("pixels", width=150, anchor=tk.CENTER)
         self.tree.column("date_added", width=200, anchor=tk.CENTER)
 
@@ -42,7 +44,7 @@ class QuerySeriesWindow:
 
         self.load_products()
 
-        self.delete_button = tk.Button(self.root, text="Deletar Produto", command=self.delete_serie)
+        self.delete_button = tk.Button(self.root, text="Deletar Produto", command=self.delete_documentario)
         self.delete_button.pack(pady=10)
 
         self.back_button = tk.Button(self.root, text="Voltar", command=self.callback)
@@ -57,36 +59,36 @@ class QuerySeriesWindow:
             self.tree.delete(item)
 
     def load_products(self):
-        db = seriesRepository()
-        self.series = db.get_series()
-        self.display_series(self.series)
+        db = documentariosRepository()
+        self.documentarios = db.get_documentarios()
+        self.display_documentarios(self.documentarios)
 
-    def display_series(self, products):
+    def display_documentarios(self, products):
         self.clear_treeview()
         for product in products:
             pixels = product['pixels']
             if pixels.lower() != "cinema":
                 pixels += "p"
             self.tree.insert("", tk.END,
-                             values=(product['name'], pixels, product['date_added']))
+                             values=(product['name'], product['genre'], product['year'], pixels, product['date_added']))
 
-    def filter_serie(self, event):
+    def filter_documentarios(self, event):
         query = self.search_entry.get().lower()
         filtered_products = [
-            product for product in self.series
-            if query in product['name'].lower()
+            product for product in self.documentarios
+            if query in product['name'].lower() or query in product['genre'].lower()
         ]
-        self.display_series(filtered_products)
+        self.display_documentarios(filtered_products)
 
-    def delete_serie(self):
+    def delete_documentario(self):
         selected_item = self.tree.selection()
         if selected_item:
             item = self.tree.item(selected_item)
             product_name = item['values'][0]
-            self.show_delete_serie_window(product_name)
+            self.show_delete_documentario_window(product_name)
         else:
-            messagebox.showwarning("Aviso", "Selecione uma série para deletar.")
+            messagebox.showwarning("Aviso", "Selecione um documentario para deletar.")
 
-    def show_delete_serie_window(self, serie_name):
+    def show_delete_documentario_window(self, documentario_name):
         delete_window = tk.Toplevel(self.root)
-        DeleteSeriesWindow(delete_window, self.load_products, serie_name)
+        DeleteDocumentariosWindow(delete_window, self.load_products, documentario_name)

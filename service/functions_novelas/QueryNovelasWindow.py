@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from repository.seriesRepository import seriesRepository
-from service.functions_series.DeleteSeriesWindow import DeleteSeriesWindow
+from repository.novelasRepository import novelasRepository
+from service.functions_novelas.DeleteNovelasWindow import DeleteNovelasWindow
 
-class QuerySeriesWindow:
+class QueryNovelasWindow:
     def __init__(self, root, callback):
         self.root = root
         self.callback = callback
@@ -14,7 +14,7 @@ class QuerySeriesWindow:
     def create_widgets(self):
         self.clear_window()
 
-        self.label = tk.Label(self.root, text="Consulta de Series", font=("Helvetica", 16))
+        self.label = tk.Label(self.root, text="Consulta de Novelas", font=("Helvetica", 16))
         self.label.pack(pady=20)
 
         self.search_frame = tk.Frame(self.root)
@@ -25,10 +25,10 @@ class QuerySeriesWindow:
 
         self.search_entry = tk.Entry(self.search_frame)
         self.search_entry.pack(side=tk.LEFT, padx=5)
-        self.search_entry.bind('<KeyRelease>', self.filter_serie)
+        self.search_entry.bind('<KeyRelease>', self.filter_novelas)
 
         self.tree = ttk.Treeview(self.root, columns=("name", "genre", "year", "pixels", "date_added"), show='headings')
-        self.tree.heading("name", text="Nome da Série")
+        self.tree.heading("name", text="Nome da Novela")
         self.tree.heading("genre", text="")
         self.tree.heading("year", text="")
         self.tree.heading("pixels", text="Qualidade em Pixels")
@@ -42,7 +42,7 @@ class QuerySeriesWindow:
 
         self.load_products()
 
-        self.delete_button = tk.Button(self.root, text="Deletar Produto", command=self.delete_serie)
+        self.delete_button = tk.Button(self.root, text="Deletar Produto", command=self.delete_novela)
         self.delete_button.pack(pady=10)
 
         self.back_button = tk.Button(self.root, text="Voltar", command=self.callback)
@@ -57,11 +57,11 @@ class QuerySeriesWindow:
             self.tree.delete(item)
 
     def load_products(self):
-        db = seriesRepository()
-        self.series = db.get_series()
-        self.display_series(self.series)
+        db = novelasRepository()
+        self.novelas = db.get_novelas()
+        self.display_novelas(self.novelas)
 
-    def display_series(self, products):
+    def display_novelas(self, products):
         self.clear_treeview()
         for product in products:
             pixels = product['pixels']
@@ -70,23 +70,23 @@ class QuerySeriesWindow:
             self.tree.insert("", tk.END,
                              values=(product['name'], pixels, product['date_added']))
 
-    def filter_serie(self, event):
+    def filter_novelas(self, event):
         query = self.search_entry.get().lower()
         filtered_products = [
-            product for product in self.series
+            product for product in self.novelas
             if query in product['name'].lower()
         ]
-        self.display_series(filtered_products)
+        self.display_novelas(filtered_products)
 
-    def delete_serie(self):
+    def delete_novela(self):
         selected_item = self.tree.selection()
         if selected_item:
             item = self.tree.item(selected_item)
             product_name = item['values'][0]
-            self.show_delete_serie_window(product_name)
+            self.show_delete_novela_window(product_name)
         else:
             messagebox.showwarning("Aviso", "Selecione uma série para deletar.")
 
-    def show_delete_serie_window(self, serie_name):
+    def show_delete_novela_window(self, novela_name):
         delete_window = tk.Toplevel(self.root)
-        DeleteSeriesWindow(delete_window, self.load_products, serie_name)
+        DeleteNovelasWindow(delete_window, self.load_products, novela_name)

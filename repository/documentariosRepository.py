@@ -1,12 +1,12 @@
 from pymongo import MongoClient
 
-class filmesRepository:
+class documentariosRepository:
     def __init__(self):
         self.client = MongoClient("mongodb://root:example@localhost:27017/")
         self.db = self.client.sales_management
-        self.collection = self.db.filmes
+        self.collection = self.db.documentarios
 
-    def add_filme(self, name, genre, year, pixels, date_added):
+    def add_documentario(self, name, genre, year, pixels, date_added):
         product = {
             "name": name,
             "genre": genre,
@@ -16,10 +16,10 @@ class filmesRepository:
         }
         result = self.collection.insert_one(product)
 
-    def filme_exists(self, name):
+    def documentario_exists(self, name):
         return self.collection.find_one({"name": name}) is not None
 
-    def get_filmes(self):
+    def get_documentarios(self):
         products = self.collection.find()
         product_list = [
             {
@@ -33,7 +33,7 @@ class filmesRepository:
         ]
         return product_list
 
-    def delete_filme(self, name):
+    def delete_documentario(self, name):
         result = self.collection.delete_one({"name": name})
         return result.deleted_count > 0
 

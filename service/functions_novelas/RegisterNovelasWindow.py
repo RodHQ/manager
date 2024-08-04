@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
 from datetime import datetime
-from repository.seriesRepository import seriesRepository
+from repository.novelasRepository import novelasRepository
 
-class RegisterSeriesWindow:
+class RegisterNovelasWindow:
     def __init__(self, root, callback):
         self.root = root
         self.callback = callback
@@ -14,11 +14,11 @@ class RegisterSeriesWindow:
     def create_widgets(self):
         self.clear_window()
 
-        self.label = tk.Label(self.root, text="Cadastrar Serie", font=("Helvetica", 16))
+        self.label = tk.Label(self.root, text="Cadastrar Novela", font=("Helvetica", 16))
         self.label.pack(pady=20)
 
-        self.nome_serie_label = tk.Label(self.root, text="Nome da Serie:")
-        self.nome_serie_label.pack(pady=5)
+        self.nome_novela_label = tk.Label(self.root, text="Nome da Novela:")
+        self.nome_novela_label.pack(pady=5)
         self.nome_filme_entry = tk.Text(self.root, height=1, width=60)
         self.nome_filme_entry.pack(pady=5)
         self.nome_filme_entry.bind('<KeyRelease>', self.check_duplicate)
@@ -34,7 +34,7 @@ class RegisterSeriesWindow:
         self.date_added_value = tk.Label(self.root, text=datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
         self.date_added_value.pack(pady=5)
 
-        self.register_button = tk.Button(self.root, text="Cadastrar", command=self.add_serie)
+        self.register_button = tk.Button(self.root, text="Cadastrar", command=self.add_novela)
         self.register_button.pack(pady=20)
 
         self.back_button = tk.Button(self.root, text="Voltar", command=self.callback)
@@ -45,35 +45,29 @@ class RegisterSeriesWindow:
             widget.destroy()
 
     def check_duplicate(self, event):
-        db = seriesRepository()
+        db = novelasRepository()
         nome_filme = self.nome_filme_entry.get("1.0", tk.END).strip()
-        if db.serie_exists(nome_filme):
+        if db.novela_exists(nome_filme):
             self.nome_filme_entry.tag_add("duplicate", "1.0", tk.END)
             self.nome_filme_entry.tag_config("duplicate", foreground="red")
         else:
             self.nome_filme_entry.tag_remove("duplicate", "1.0", tk.END)
 
-    def add_serie(self):
+    def add_novela(self):
         nome_filme = self.nome_filme_entry.get("1.0", tk.END).strip().split('*', 1)[0].strip()
         pixels = self.pixels_value_entry.get()
         date_added = datetime.now().strftime("%d/%m/%Y %H:%M:%S")  # Obtendo a data e hora atual
 
         if nome_filme and pixels:
-            db = seriesRepository()
-            if db.serie_exists(nome_filme):
+            db = novelasRepository()
+            if db.novela_exists(nome_filme):
                 messagebox.showwarning("Erro", f"Produto com o nome '{nome_filme}' já existe.")
             else:
                 print(f"Cadastrando produto: Nome={nome_filme}, Pixels={pixels}, Data de Cadastro={date_added}")  # Depuração
-                db.add_serie(nome_filme, pixels, date_added)
-                messagebox.showinfo("Sucesso", "Serie cadastrada com sucesso!")
+                db.add_novela(nome_filme, pixels, date_added)
+                messagebox.showinfo("Sucesso", "Novela cadastrada com sucesso!")
                 self.nome_filme_entry.delete("1.0", tk.END)
                 self.pixels_value_entry.set('')
                 self.nome_filme_entry.tag_remove("duplicate", "1.0", tk.END)  # Resetar a cor do texto
         else:
             messagebox.showwarning("Erro", "Por favor, preencha todos os campos.")
-
-# Código de exemplo para iniciar a aplicação
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = RegisterSeriesWindow(root, callback=lambda: print("Voltar para o menu principal"))
-    root.mainloop()

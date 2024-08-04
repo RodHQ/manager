@@ -60,7 +60,7 @@ class QueryFilmesWindow:
 
     def load_products(self):
         db = filmesRepository()
-        self.products = db.get_filme()
+        self.products = db.get_filmes()
         self.display_products(self.products)
 
     def display_products(self, products):
