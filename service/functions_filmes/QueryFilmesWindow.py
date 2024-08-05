@@ -27,13 +27,15 @@ class QueryFilmesWindow:
         self.search_entry.pack(side=tk.LEFT, padx=5)
         self.search_entry.bind('<KeyRelease>', self.filter_products)
 
-        self.tree = ttk.Treeview(self.root, columns=("name", "genre", "year", "pixels", "date_added"), show='headings')
+        self.tree = ttk.Treeview(self.root, columns=("count", "name", "genre", "year", "pixels", "date_added"), show='headings')
+        self.tree.heading("count", text="Contador")
         self.tree.heading("name", text="Nome do Filme")
         self.tree.heading("genre", text="Gênero")
         self.tree.heading("year", text="Ano de Criação")
         self.tree.heading("pixels", text="Qualidade em Pixels")
         self.tree.heading("date_added", text="Data de Cadastro")
 
+        self.tree.column("count", width=100, anchor=tk.CENTER)
         self.tree.column("name", width=200, anchor=tk.CENTER)
         self.tree.column("genre", width=150, anchor=tk.CENTER)
         self.tree.column("year", width=100, anchor=tk.CENTER)
@@ -65,12 +67,12 @@ class QueryFilmesWindow:
 
     def display_products(self, products):
         self.clear_treeview()
-        for product in products:
+        for idx, product in enumerate(products, start=1):
             pixels = product['pixels']
             if pixels.lower() != "cinema":
                 pixels += "p"
             self.tree.insert("", tk.END,
-                             values=(product['name'], product['genre'], product['year'], pixels, product['date_added']))
+                             values=(idx, product['name'], product['genre'], product['year'], pixels, product['date_added']))
 
     def filter_products(self, event):
         query = self.search_entry.get().lower()
@@ -84,7 +86,7 @@ class QueryFilmesWindow:
         selected_item = self.tree.selection()
         if selected_item:
             item = self.tree.item(selected_item)
-            product_name = item['values'][0]
+            product_name = item['values'][1]
             self.show_delete_product_window(product_name)
         else:
             messagebox.showwarning("Aviso", "Selecione um filme para deletar.")
