@@ -22,7 +22,7 @@ class SalesApp:
     def create_main_menu(self):
         self.clear_window()
 
-        self.root.geometry("400x300")
+        self.root.geometry("500x350")
 
         self.label = tk.Label(self.root, text="Selecione uma opção", font=("Helvetica", 16))
         self.label.pack(pady=20)
